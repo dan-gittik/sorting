@@ -48,7 +48,7 @@ def main(argv):
 NUMBER OF OPCODES
 =================
 
-Average: {sum(tracer.opcodes for tracer in tracers) / len(tracers):.02f}
+Average: {sum(tracer.opcodes for tracer in tracers) / len(tracers):.0f}
 Worst:   {max(tracer.opcodes for tracer in tracers)}
 Best:    {min(tracer.opcodes for tracer in tracers)}
 

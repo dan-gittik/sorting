@@ -5,7 +5,8 @@ measure thier runtime complexity.
 
 ## Usage
 
-To run a specific algorithm, either run ``main.py`` on some module and input size. For example:
+To run a specific algorithm, run ``main.py`` on a module with a ``sort(array)`` function and some input size.
+For example:
 
 ```shell
 $ python main.py bubble.py 100
@@ -14,7 +15,7 @@ $ python main.py bubble.py 100
 NUMBER OF OPCODES
 =================
 
-Average: 64045.38
+Average: 64045
 Worst:   100306
 Best:    415
 
@@ -30,20 +31,20 @@ Total:   4.35
 
 So far I've implemented:
 
-- [Bubble Sort](https://en.wikipedia.org/wiki/Bubble_sort).
-- [Insertion Sort](https://en.wikipedia.org/wiki/Insertion_sort).
-- [Selection Sort](https://en.wikipedia.org/wiki/Selection_sort).
-- [Merge Sort](https://en.wikipedia.org/wiki/Merge_sort).
-- [Quicksort](https://en.wikipedia.org/wiki/Quicksort).
+- [Bubble Sort](https://en.wikipedia.org/wiki/Bubble_sort)
+- [Insertion Sort](https://en.wikipedia.org/wiki/Insertion_sort)
+- [Selection Sort](https://en.wikipedia.org/wiki/Selection_sort)
+- [Merge Sort](https://en.wikipedia.org/wiki/Merge_sort)
+- [Quicksort](https://en.wikipedia.org/wiki/Quicksort)
 
 ## Runtime Complexity Measurement
 
-The obvious thing to measure is runtime (in seconds), but I wanted a more robust measure: the number of opcodes
+The obvious thing to measure is runtime (in seconds), but I wanted a more robust metric: the number of opcodes
 executed to perform the sort.
 
 Unfortunately, Python's tracer (``sys.settrace``) works on source lines rather than opcodes, and if you've programmed
-in Python for more than a couple months you probably had that phase where you do everything in one liners, so you know
-sources lines mean very little.
+in Python for more than a couple months, you probably had that phase where you did everything with a one liner and know
+that sources lines mean very little.
 
 Instead, and with [Ned Batchelder's help](https://nedbatchelder.com/blog/200804/wicked_hack_python_bytecode_tracing.html),
 I wrote a tracer that works on opcodes! 
@@ -55,32 +56,35 @@ in the traced context:
 
 ```python
 >>> module = compile_module('''
-...	def add(x, y):
+... def add(x, y):
 ...    return x + y
 ... ''')
 
 >>> class Tracer(OpcodeTracer):
 ...     def trace(self):
-...			print(self.opname)
+...         print(self.opname)
 
 >>> with Tracer():
-...		module.add(1, 2)
+...     module.add(1, 2)
 LOAD_FAST
 LOAD_FAST
 BINARY_ADD
 RETURN_VALUE
 ```
 
-``compile_module(source, name='')`` receives Python source code and optionally the module name, and returns
-the specially compiled module.
+``compile_module(source, name='')``
+    Receives Python source code and optionally the module name, and returns
+    the specially compiled module.
 
-``import_module(path)`` receives a path to a Python module, derives the module name from it, and returns the
-specially compiled module.
+``import_module(path)``
+    Receives a path to a Python module, derives the module name from it, and returns the
+    specially compiled module.
 
-``OpcodeTracer`` receives an optional whitelist of opcode names, and returns a context manager.
-- When it starts, it calls ``on_start()``.
-- When it stops, it calls ``on_stop()``.
-- When it is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a whitelist
-  was specified, only opcodes in the whitelist are traced). Several attributes are available to id: ``self.frame``
-  is the current frame; ``self.event`` is the current event; ``self.arg`` is the current argument; ``self.opcode``
-  is the current opcode; and ``self.opname`` is the current opcode name.
+``OpcodeTracer``
+    Receives an optional whitelist of opcode names, and returns a context manager.
+    - When it starts, it calls ``on_start()``.
+    - When it stops, it calls ``on_stop()``.
+    - When it is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a whitelist
+      was specified, only opcodes in the whitelist are traced). Several attributes are available to id: ``self.frame``
+      is the current frame; ``self.event`` is the current event; ``self.arg`` is the current argument; ``self.opcode``
+      is the current opcode; and ``self.opname`` is the current opcode name.
