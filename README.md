@@ -52,7 +52,7 @@ I wrote a tracer that works on opcodes!
 Tracing opcodes only runs on specially compiled modules, so you'd have to run ``module = compiled_module(source)``
 or ``module = import_module(path)``, and then trace that module's execution. To do that, subclass ``OpcodeTracer``
 and implement the ``trace()`` method, which will be invoked for every opcode executed by specially compiled modules
-in the traced context:
+in the traced context. For example:
 
 ```python
 >>> module = compile_module('''
@@ -74,20 +74,18 @@ RETURN_VALUE
 
 ``compile_module(source, name='')``
 
-    Receives Python source code and optionally the module name, and returns
-    the specially compiled module.
+Receives Python source code and optionally the module name, and returns the specially compiled module.
 
 ``import_module(path)``
 
-    Receives a path to a Python module, derives the module name from it, and returns the
-    specially compiled module.
+Receives a path to a Python module, derives the module name from it, and returns the specially compiled module.
 
-``OpcodeTracer``
+``OpcodeTracer(whitelist=[])``
 
-    Receives an optional whitelist of opcode names, and returns a context manager.
-    - When it starts, it calls ``on_start()``.
-    - When it stops, it calls ``on_stop()``.
-    - When it is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a whitelist
-      was specified, only opcodes in the whitelist are traced). Several attributes are available to id: ``self.frame``
-      is the current frame; ``self.event`` is the current event; ``self.arg`` is the current argument; ``self.opcode``
-      is the current opcode; and ``self.opname`` is the current opcode name.
+Receives an optional whitelist of opcode names, and returns a context manager.
+- When it starts, it calls ``on_start()``.
+- When it stops, it calls ``on_stop()``.
+- When it is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a whitelist
+  was specified, only opcodes in the whitelist are traced). Several attributes are available to id: ``self.frame``
+  is the current frame; ``self.event`` is the current event; ``self.arg`` is the current argument; ``self.opcode``
+  is the current opcode; and ``self.opname`` is the current opcode name.
