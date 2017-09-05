@@ -73,14 +73,17 @@ RETURN_VALUE
 ```
 
 ``compile_module(source, name='')``
+
     Receives Python source code and optionally the module name, and returns
     the specially compiled module.
 
 ``import_module(path)``
+
     Receives a path to a Python module, derives the module name from it, and returns the
     specially compiled module.
 
 ``OpcodeTracer``
+
     Receives an optional whitelist of opcode names, and returns a context manager.
     - When it starts, it calls ``on_start()``.
     - When it stops, it calls ``on_stop()``.
