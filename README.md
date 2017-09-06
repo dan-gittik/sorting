@@ -76,7 +76,7 @@ RETURN_VALUE
 For a more complete example, see ``opcodetracer/demo.py``:
 
 ```shell
-$ python -m opcodetracer.demo.py
+$ python -m opcodetracer.demo
 starting
 demo:2 [0] LOAD_FAST (x)
 demo:3 [2] LOAD_FAST (y)
