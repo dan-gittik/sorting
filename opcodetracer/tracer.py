@@ -9,15 +9,15 @@ class OpcodeTracer:
         self.whitelist = whitelist
 
     def __call__(self, frame, event, argument):
-        if (not frame.f_globals.get('__patched__')
-            or  frame.f_lasti == -1
-            or (self.whitelist and opcode.opname[frame.f_code.co_code[frame.f_lasti]] not in self.whitelist)):
+        if not frame.f_globals.get('__patched__') or frame.f_lasti == -1:
             return self
         self.frame, self.event, self.argument = frame, event, argument
-        for instruction in dis.get_instructions(self.frame.f_code):
-            if instruction.offset == self.frame.f_lasti:
-                self.instruction = instruction
-                break
+        self.offset = self.frame.f_lasti
+        self.opcode = self.frame.f_code.co_code[self.offset]
+        self.opname = opcode.opname[self.opcode]
+        if self.whitelist and self.opname not in self.whitelist:
+            return self
+        self._instruction = None
         self.trace()
         return self
 
@@ -39,3 +39,12 @@ class OpcodeTracer:
 
     def trace(self):
         pass
+
+    @property
+    def instruction(self):
+        if not self._instruction:
+            for instruction in dis.get_instructions(self.frame.f_code):
+                if instruction.offset == self.offset:
+                    self._instruction = instruction
+                    break
+        return self._instruction

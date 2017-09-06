@@ -63,7 +63,7 @@ in the traced context. For example:
 
 >>> class Tracer(OpcodeTracer):
 ...     def trace(self):
-...         print(self.instruction.opname)
+...         print(self.opname)
 
 >>> with Tracer():
 ...     z = module.add(1, 2)
@@ -105,4 +105,6 @@ This class receives an optional whitelist of opcode names, and returns a context
 - When the instance is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a
   whitelist was specified, only opcodes in that whitelist are traced). Several attributes are available to this
   method: ``self.frame`` is the current frame; ``self.event`` is the current event; ``self.argument`` is the current
-  argument; and ``self.instruction`` is the current [Instruction](https://docs.python.org/3/library/dis.html#dis.Instruction).
+  argument; ``self.offset`` is the current offset in the bytecode; ``self.opcode`` is the current opcode;
+  ``self.opname`` is the current opcode name; and ``self.instruction`` is the current
+  [Instruction](https://docs.python.org/3/library/dis.html#dis.Instruction).
