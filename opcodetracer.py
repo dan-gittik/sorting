@@ -31,10 +31,7 @@ def _patch_line_numbers(code):
     new_lnotab = b''.join(new_lnotab)
     new_consts = []
     for const in code.co_consts:
-        if type(const) == types.CodeType:
-            new_consts.append(_patch_line_numbers(const))
-        else:
-            new_consts.append(const)
+        new_consts.append(_patch_line_numbers(const) if isinstance(const, types.CodeType) else const)
     return types.CodeType(
         code.co_argcount,
         code.co_kwonlyargcount,
