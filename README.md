@@ -66,27 +66,43 @@ in the traced context. For example:
 ...         print(self.opname)
 
 >>> with Tracer():
-...     module.add(1, 2)
+...     z = module.add(1, 2)
 LOAD_FAST
 LOAD_FAST
 BINARY_ADD
 RETURN_VALUE
 ```
 
+For a more complete example, see ``opcodetracer/demo.py``:
+
+```shell
+$ python opcodetracer/demo.py
+starting
+demo:2 [0] LOAD_FAST
+demo:3 [2] LOAD_FAST
+demo:5 [4] BINARY_ADD
+demo:5 [6] RETURN_VALUE
+z = 3
+stopping
+```
+
+### API
+
 ``compile_module(source, name='')``
 
-Receives Python source code and optionally the module name, and returns the specially compiled module.
+This function receives Python the source code and optionally the module name, and returns the specially compiled module.
 
 ``import_module(path)``
 
-Receives a path to a Python module, derives the module name from it, and returns the specially compiled module.
+This function receives the path to a Python module, derives the module name from it, and returns the specially compiled
+module.
 
 ``OpcodeTracer(whitelist=[])``
 
-Receives an optional whitelist of opcode names, and returns a context manager.
-- When it starts, it calls ``on_start()``.
-- When it stops, it calls ``on_stop()``.
-- When it is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a whitelist
-  was specified, only opcodes in the whitelist are traced). Several attributes are available to it: ``self.frame``
-  is the current frame; ``self.event`` is the current event; ``self.arg`` is the current argument; ``self.opcode``
-  is the current opcode; and ``self.opname`` is the current opcode name.
+This class receives an optional whitelist of opcode names, and returns a context manager instance.
+- When the instance is started, it calls ``on_start()``.
+- When the instance is stopped, it calls ``on_stop()``.
+- When the instance is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a
+  whitelist was specified, only opcodes in that whitelist are traced). Several attributes are available to this
+  method: ``self.frame`` is the current frame; ``self.event`` is the current event; ``self.arg`` is the current
+  argument; ``self.opcode`` is the current opcode; and ``self.opname`` is the current opcode name.
