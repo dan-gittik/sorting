@@ -1,7 +1,7 @@
 # Sorting
 
 A collection of sorting algorithms implemented in Python, with an absolute overkill of an infrastructure to
-measure thier runtime complexity.
+measure their runtime complexity.
 
 ## Usage
 
