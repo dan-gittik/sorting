@@ -63,7 +63,7 @@ in the traced context. For example:
 
 >>> class Tracer(OpcodeTracer):
 ...     def trace(self):
-...         print(self.opname)
+...         print(self.instruction.opname)
 
 >>> with Tracer():
 ...     z = module.add(1, 2)
@@ -76,10 +76,10 @@ RETURN_VALUE
 For a more complete example, see ``opcodetracer/demo.py``:
 
 ```shell
-$ python opcodetracer/demo.py
+$ python -m opcodetracer.demo.py
 starting
-demo:2 [0] LOAD_FAST
-demo:3 [2] LOAD_FAST
+demo:2 [0] LOAD_FAST (x)
+demo:3 [2] LOAD_FAST (y)
 demo:5 [4] BINARY_ADD
 demo:5 [6] RETURN_VALUE
 z = 3
@@ -104,5 +104,5 @@ This class receives an optional whitelist of opcode names, and returns a context
 - When the instance is stopped, it calls ``on_stop()``.
 - When the instance is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a
   whitelist was specified, only opcodes in that whitelist are traced). Several attributes are available to this
-  method: ``self.frame`` is the current frame; ``self.event`` is the current event; ``self.arg`` is the current
-  argument; ``self.opcode`` is the current opcode; and ``self.opname`` is the current opcode name.
+  method: ``self.frame`` is the current frame; ``self.event`` is the current event; ``self.argument`` is the current
+  argument; and ``self.instruction`` is the current [Instruction](https://docs.python.org/3/library/dis.html#dis.Instruction).

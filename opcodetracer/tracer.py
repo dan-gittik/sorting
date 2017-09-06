@@ -1,3 +1,4 @@
+import dis
 import opcode
 import sys
 
@@ -7,16 +8,17 @@ class OpcodeTracer:
     def __init__(self, whitelist=None):
         self.whitelist = whitelist
 
-    def __call__(self, frame, event, arg):
-        if not frame.f_globals.get('__patched__') or frame.f_lasti == -1:
+    def __call__(self, frame, event, argument):
+        if (not frame.f_globals.get('__patched__')
+            or  frame.f_lasti == -1
+            or (self.whitelist and opcode.opname[frame.f_code.co_code[frame.f_lasti]] not in self.whitelist)):
             return self
-        self.frame  = frame
-        self.event  = event
-        self.arg    = arg
-        self.opcode = frame.f_code.co_code[frame.f_lasti]
-        self.opname = opcode.opname[self.opcode]
-        if not self.whitelist or self.opname in self.whitelist:
-            self.trace()
+        self.frame, self.event, self.argument = frame, event, argument
+        for instruction in dis.get_instructions(self.frame.f_code):
+            if instruction.offset == self.frame.f_lasti:
+                self.instruction = instruction
+                break
+        self.trace()
         return self
 
     def __enter__(self):

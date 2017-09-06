@@ -1,13 +1,13 @@
-import opcodetracer
+from . import compile_module, OpcodeTracer
 
 
-module = opcodetracer.compile_module('''
+module = compile_module('''
 def add(x, y):
     return x + y
 ''', name='demo')
 
 
-class Tracer(opcodetracer.OpcodeTracer):
+class Tracer(OpcodeTracer):
     
     def on_start(self):
         print('starting')
@@ -16,7 +16,8 @@ class Tracer(opcodetracer.OpcodeTracer):
         print('stopping')
 
     def trace(self):
-        print(f'{self.frame.f_code.co_filename}:{self.frame.f_lineno} [{self.frame.f_lasti}] {self.opname}')
+        print(f'{self.frame.f_code.co_filename}:{self.frame.f_lineno} [{self.instruction.offset}] {self.instruction.opname}' +
+             (f' ({self.instruction.argrepr})' if self.instruction.arg is not None else ''))
 
 
 with Tracer():

@@ -44,4 +44,4 @@ def _patch_line_numbers(code):
         code.co_name,
         code.co_firstlineno,
         new_lnotab,
-    )  
+    )
