@@ -5,6 +5,10 @@ import time
 from opcodetracer import OpcodeTracer, import_module
 
 
+MIN = -1000
+MAX = +1000
+
+
 class Tracer(OpcodeTracer):
 
     def on_start(self):
@@ -22,20 +26,21 @@ class Tracer(OpcodeTracer):
         return self.stop_time - self.start_time
 
 
-def generate_arrays(array_size):
+def generate_arrays(array_size, min, max):
     for _ in range(50):
-        yield [random.randint(-100, 100) for _ in range(array_size)]
-    yield list(range(array_size))           # Sorted.
-    yield list(reversed(range(array_size))) # Reversed.
-    yield [1]*array_size                    # Identical.
+        array = [random.randint(min, max) for _ in range(array_size)]
+        yield array
+    yield sorted(array)
+    yield list(reversed(array))
+    yield [1]*array_size
 
 
 def main(argv):
     if len(argv) != 3:
         print(f'USAGE: python {argv[0]} <sorting-module-path> <array-size>')
-        sys.exit(1)
+        return 1
     module  = import_module(argv[1])
-    arrays  = generate_arrays(int(argv[2]))
+    arrays  = generate_arrays(int(argv[2]), getattr(module, 'MIN', MIN), getattr(module, 'MAX', MAX))
     tracers = []
     for array in arrays:
         print('.', end='', flush=True) # Show progress.

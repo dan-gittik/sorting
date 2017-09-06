@@ -37,6 +37,7 @@ So far I've implemented:
 - [Merge Sort](https://en.wikipedia.org/wiki/Merge_sort)
 - [Quicksort](https://en.wikipedia.org/wiki/Quicksort)
 - [Heap Sort](https://en.wikipedia.org/wiki/Heapsort)
+- [Counting Sort](https://en.wikipedia.org/wiki/Counting_sort)
 
 ## Runtime Complexity Measurement
 
