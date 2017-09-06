@@ -52,7 +52,7 @@ Average: {sum(tracer.opcodes for tracer in tracers) / len(tracers):.0f}
 Worst:   {max(tracer.opcodes for tracer in tracers)}
 Best:    {min(tracer.opcodes for tracer in tracers)}
 
-TIME ELAPSED
+ELAPSED TIME
 ============
 
 Average: {sum(tracer.elapsed for tracer in tracers) / len(tracers):.02f}

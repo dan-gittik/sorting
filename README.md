@@ -19,7 +19,7 @@ Average: 64045
 Worst:   100306
 Best:    415
 
-TIME ELAPSED
+ELAPSED TIME
 ============
 
 Average: 0.08
