@@ -87,6 +87,6 @@ Receives an optional whitelist of opcode names, and returns a context manager.
 - When it starts, it calls ``on_start()``.
 - When it stops, it calls ``on_stop()``.
 - When it is active, it calls ``trace()`` for every opcode executed by specially compiled modules (if a whitelist
-  was specified, only opcodes in the whitelist are traced). Several attributes are available to id: ``self.frame``
+  was specified, only opcodes in the whitelist are traced). Several attributes are available to it: ``self.frame``
   is the current frame; ``self.event`` is the current event; ``self.arg`` is the current argument; ``self.opcode``
   is the current opcode; and ``self.opname`` is the current opcode name.
